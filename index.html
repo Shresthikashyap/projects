@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+    
+    <style>
+    input{   
+        padding: 0.85px;
+        border-radius: 150px;
+        width: 240px;
+        background: #ce9142;
+    }
+    .wrapper{
+    background-color: #20160d;
+    position:relative;
+    width:40%;
+    margin: 20px auto;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: rgba(201, 131, 41, 0.25) 0px 13px 27px -5px;
+    }
+    label, header{
+    position: relative;
+    text-align: center;
+    padding-bottom:5px;
+    font-family:'Times New Roman', Times, serif;
+    color:#ce9238;
+    }
+    form{
+    margin: 0 auto;
+    max-width: 20rem;
+    overflow:auto;
+    }
+    button {
+    margin-top: 2rem;
+    border: 0;
+    border-radius: 150px;
+    width: 100%;
+    padding: 15px;
+    font-size: 1rem;
+    background: #ce9238;
+    }
+  </style>
+</head>
+<body style="background-image: url('https://images.unsplash.com/photo-1610116306796-6fea9f4fae38?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80');"
+     <form action=""> <div class="wrapper">
+      <header> <h1 style="color:#ce9238" >Rent a Book</h1> </header>
+    
+ 
+    <label for="name">Name: </label><br>
+    <input type="text" placeholder="username" id="name" name="username"><br><br>
+
+    <label for="Email" >Email: </label><br>
+    <input type="text" placeholder="@gmail.com" id="Email" name="Email"><br><br>
+
+    <label for="phone number">Phone number:</label><br>
+    <input type="number" placeholder="Contact no." id="phone number" name="Phone number"><br><br>
+
+    <label for="check in">Check in : </label>  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp <label for="check out">Check out : </label><br> 
+    <input type="date" id="check" name="calender">  
+          
+    <input type="date" id="check" name="calender">
+
+    <button onclick="submitForm()" > Submit </button>
+     </div>
+    </form>
+   
+    
+    <Script src="script.js"></Script>
+</body>
+</html>
