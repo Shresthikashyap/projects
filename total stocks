@@ -74,7 +74,7 @@ window.addEventListener("DOMContentLoaded",()=>{
  })
 var curr = getElementById('total').value;
         
- function save(event){ 
+function save(event){ 
 
 event.preventDefault(); 
  
@@ -82,7 +82,7 @@ const cost = event.target.price.value;
 const prod = event.target.product.value;
 
 const obj = {
-    pId,cost,prod
+    cost,prod
 }
     axios.post("https://crudcrud.com/api/3b6d12fedb4e47da88a1a06ae89b9f4d/orders",obj)
     .then((response)=>{
