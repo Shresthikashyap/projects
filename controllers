@@ -1,0 +1,340 @@
+//--------------------app.js----------------------//
+
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const app = express();
+
+const addProductRoutes = require('./routes/addProduct');
+const shopRoutes = require('./routes/shop');
+const contactUs = require('./routes/contact');
+const notFound = require('./routes/notFound');
+
+app.use(bodyParser.urlencoded({extended: true}));
+
+app.use(addProductRoutes);
+app.use(shopRoutes);
+app.use(contactUs);
+app.use(notFound);
+
+app.listen(4000);
+
+/////////////////////////////routes////////////////////////////////////
+
+/-------------------------addProduct.js-------------------------------/
+
+const path = require('path');
+const fs = require('fs');
+const express = require('express');
+
+const router = express.Router();
+
+router.get('/add-product',(req,res,next)=>{
+
+    res.sendFile(path.join(__dirname,'../','views','add-product.html'));
+});
+
+router.post('/product',(req,res,next)=>{
+
+    const message = req.body.title; 
+
+    // Read the existing content of shop.html
+    const existingContent = fs.readFileSync(path.join(__dirname,'../','views','shop.html'), 'utf8');
+
+    // Append the new content to the existing main tag
+    const updatedContent = `${existingContent}<ul><li>${message}</li></ul>`;
+
+    // Write the updated content back to shop.html
+    fs.writeFileSync(path.join(__dirname,'../','views','shop.html'), updatedContent);
+
+    res.redirect('/');
+});
+
+module.exports = router;
+
+/----------------------------------shop.js------------------------------------/
+
+const path = require('path');
+const express = require('express');
+
+const router = express.Router();
+
+router.get('/',(req,res,next)=>{
+   
+    res.sendFile(path.join(__dirname,'../','views','shop.html'));
+});
+
+module.exports = router;
+
+/-------------------------------------contact.js---------------------------------/
+
+const path = require('path');
+const express = require('express');
+
+const contactController = require('../controllers/contactus');
+const successController = require('../controllers/success');
+
+const router = express.Router();
+
+router.get('/contact',contactController.getContact);
+
+router.post('/success',successController.postSuccess);
+
+module.exports = router;
+
+/--------------------------------------notFound.js---------------------------------------/
+
+const path = require('path');
+const express = require('express');
+
+const router = express.Router();
+
+router.get('*',(req,res,next)=>{
+    console.log('error')
+   res.status(404).send('Page not found');
+});
+
+module.exports = router;
+
+////////////////////////////////////.views.///////////////////////////////////////
+
+/-----------------------------add-product.html--------------------------------/
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+</head>
+<style>
+    body{
+        padding: 0%;
+        margin: 0%;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+    main{
+        padding: 1rem;
+    }
+    .main-header{
+        width: 100%;
+        height: 3.5rem;
+        background-color: rgb(64, 106, 184);
+        padding: 0.1rem;
+    }
+    .main-header__nav{
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+    .main-header__item-list{
+        list-style:none;
+        margin: 0%;
+        padding: 0%;
+        display: flex;
+    }
+    .main-header__item{
+        margin: 0 1rem;
+        padding: 0%;
+    }
+    .main-header__item a{
+        text-decoration: none;
+        color: aliceblue;
+    }
+    .main-header__item a:hover,.main-header__item a:active,
+    .main-header__item a:active{
+        color: yellow;
+    }
+
+    .form-control label,.form-control input{
+        display: block;
+    }
+    .product-form{
+        padding: 1%;
+    }
+    .form-control input{
+        border: 1px solid rgb(0, 47, 255);
+        font: inherit;
+        border-radius: 2px;
+    }
+
+    button{
+        font: inherit;
+        border: 1px solid rgb(0, 74, 185);
+        color: white;
+        background: rgb(82, 105, 153);
+        border-radius: 3px;
+        cursor: pointer;
+    }
+</style>
+<body background-color="">
+    <header class="main-header">
+        <nav  class="main-header__nav"> 
+            <ul class="main-header__item-list">
+                <li class="main-header__item"><a href="/" >Shop</a></li>
+                <li class="main-header__item"><a href="/add-product" class="active">Add Product</a></li>
+                <li class="main-header__item"><a href="/contact">Contact Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <form action="/product" method="POST" class="product-form">
+            <div class="form-control">
+                <label for="title">Title</label>
+                <input type="text" name="title" id="title" required>
+            </div>
+            <button type="submit">Add Product</button>
+        </form>
+    </main>
+</body>
+</html>
+
+/------------------------------------------------shop.html------------------------------/
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+</head>
+<style>
+    body{
+        padding: 0%;
+        margin: 0%;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+    main{
+        padding: 1rem;
+    }
+    .main-header{
+        width: 100%;
+        height: 3.5rem;
+        background-color: rgb(64, 106, 184);
+        padding: 0.1rem;
+    }
+    .main-header__nav{
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+    .main-header__item-list{
+        list-style:none;
+        margin: 0%;
+        padding: 0%;
+        display: flex;
+    }
+    .main-header__item{
+        margin: 0 1rem;
+        padding: 0%;
+    }
+    .main-header__item a{
+        text-decoration: none;
+        color: aliceblue;
+    }
+    .main-header__item a:hover,.main-header__item a:active,
+    .main-header__item a:active{
+        color: yellow;
+    }
+</style>
+<body>
+    <header class="main-header">
+        <nav  class="main-header__nav"> 
+            <ul class="main-header__item-list">
+                <li class="main-header__item"><a href="/" class="active">Shop</a></li>
+                <li class="main-header__item"><a href="/add-product">Add Product</a></li>
+                <li class="main-header__item"><a href="/contact">Contact Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>My Products</h1>
+        <p>All the listed products...</p>
+    </main>
+</body>
+</html>
+
+/-----------------------------------------contact.html--------------------------------/
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+
+  <style type="text/css">
+
+    body{ 
+        padding-left: 1%;     
+        padding-top: 1%;
+        background-size: 100%;
+        background-image: url('https://images.unsplash.com/photo-1593953443285-bf7335acbca0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80');
+    }
+    .form-submit {
+        max-width: 450px;
+        margin:0 auto;
+        border-radius: 10px;    
+        padding: 5px; 
+        background-color: rgb(226, 159, 71);
+    }
+    .form-group{ 
+        padding: 1.5%;
+        color:rgb(18, 23, 29);
+        font-family:'Times New Roman', Times, serif;
+        
+    }
+    h2{   
+        font-weight: 600;       
+        text-align:center;
+        padding-top:3%; 
+        color:rgb(49, 11, 4);
+        font-family:'Times New Roman', Times, serif;
+    }
+  </style> 
+
+</head>
+<body>
+    <div class="container">
+        <form class="form-submit" action="/success" method="POST">
+            <h2>Book a Call</h2>
+            <div class="form-group">
+                Name:<input type="text" class="form-control" name="name" placeholder="Fullname" required>
+            </div>
+            <div class="form-group">
+                Email:<input type="email" class="form-control" name="email" placeholder="@gmail.com" required>
+            </div>
+            <div class="form-group">
+                <input   type="submit" class="btn btn-info btn-block" name="Submit" >
+            </div>
+ 
+        </form> 
+    </div>
+</body>
+</html>
+
+
+//////////////////////////////////////////////.controllers.////////////////////////////////////////////////////////
+
+/------------------------------------------------contact.js-------------------------------------------------/
+
+const path = require('path');
+
+exports.getContact = (req,res,next)=>{
+
+    res.sendFile(path.join(__dirname,'../','views','contact.html'));
+}
+
+/------------------------------------------------success.js-------------------------------------------------/
+
+exports.postSuccess=(req,res,next)=>{
+    console.log('in success');
+    res.send('<h1>Form Filled</h1>');
+}
