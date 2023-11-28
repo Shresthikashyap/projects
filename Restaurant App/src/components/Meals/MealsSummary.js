@@ -7,7 +7,7 @@ const MealsSummary = () => {
         <div className={classes.summary}>
             <h2>Hungary?</h2>
             <h3>Leave it on us</h3>
-            <p>Pick your favourite meals for your lunch or dinner from our broad selection of meals</p>
+            <p>Pick your favourite meals for lunch or dinner from our broad selection of meals</p>
             <p>All your meals are cooked just-in-time with quality ingredients by our professional chefs</p>
         </div>
     )
