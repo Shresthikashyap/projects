@@ -5,7 +5,6 @@ import classes from './Header.module.css'
 
 const Header = (props) =>{
 
-    console.log('here',props)
     return (
         <Fragment>
             <header className={classes.header}>

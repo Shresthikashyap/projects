@@ -3,6 +3,7 @@ import classes from './MealItem.module.css';
 import MealItemForm from './MealItemForm'
 
 const MealItem = (props) =>{
+   {console.log('in meal form ',props)}
     return(
         <li className={classes.meal}>
             <div>
@@ -11,7 +12,8 @@ const MealItem = (props) =>{
                 <div className ={classes.price}>{props.price}</div>            
             </div>
           <div>
-            <MealItemForm />
+           
+            <MealItemForm id={props.id} items={props}/>
           </div>
         </li>
     )
