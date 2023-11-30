@@ -7,14 +7,28 @@ const CartProvider = props => {
     const [total,updateTotal] = useState(0);
 
     const addItemToCartHandler = item =>{
+
+        const existingItemCartIndex = items.findIndex((i) => i.id === item.id)
        
-        updateItems([...items,item]);
+        if(existingItemCartIndex === -1){
+            updateItems([...items,item]);
+        }else{
+            const updatedItems = [...items];
+            updatedItems[existingItemCartIndex].quantity = Number(updatedItems[existingItemCartIndex].quantity)+1;
+            updateItems(updatedItems);
+        }
 
         const priceNumber = Number(item.price.replace('₹', ''));
-        updateTotal(total+priceNumber)
+        updateTotal(total+priceNumber);
     };
 
-    const removeItemFromCartHandler = id =>{};
+    const removeItemFromCartHandler = id =>{
+
+        const itemToRemove = items.find((item) => item.id === id);
+
+        const priceNumber = Number(itemToRemove.price.replace('₹', ''));
+        updateTotal(total - priceNumber);
+    };
 
     const cartContext = {
         items: items,

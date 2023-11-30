@@ -7,11 +7,13 @@ import classes from './HeaderCartButton.module.css';
 const HeaderCartButton = (props) =>{
 
     const cartCtx = useContext(CartContext);
-
+  
+    console.log('in header acrt button', cartCtx.items)
     let quantity = 0;
     cartCtx.items.forEach((item)=>{
         quantity = quantity + Number(item.quantity);
     });
+    
 
     return (
         <button className={classes.button} onClick={props.onClickButton}>
