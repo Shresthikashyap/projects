@@ -25,9 +25,19 @@ const CartProvider = props => {
     const removeItemFromCartHandler = id =>{
 
         const itemToRemove = items.find((item) => item.id === id);
-
-        const priceNumber = Number(itemToRemove.price.replace('₹', ''));
-        updateTotal(total - priceNumber);
+         
+        const updatedItems = [...items];
+        if(Number(itemToRemove.quantity) === 0){
+            updatedItems.splice(itemToRemove,1);
+            updateItems(updatedItems);
+        }
+        else{
+            
+            itemToRemove.quantity = Number(itemToRemove.quantity)-1;
+            const priceNumber = Number(itemToRemove.price.replace('₹', ''));
+            updateTotal(total - priceNumber);
+        }
+        
     };
 
     const cartContext = {
