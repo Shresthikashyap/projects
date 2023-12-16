@@ -8,6 +8,8 @@ function App() {
 
   const [movies,setMovies] = useState([]);
   const [isLoading,setIsLoading] = useState(false);
+  const [err,setError] = useState('');
+  const [retry,setRetry] = useState('');
 
   const setMoviesHandler = async() =>{
     try{
@@ -30,7 +32,17 @@ function App() {
     }
     catch(err){
        console.log(err)
+       setError('Something Went Wrong');
+       setTimeout(()=>{
+        setError('');
+        setRetry('something Went Wrong ...Retrying');
+       },3000);
     }
+  }
+
+  const retryingHandler = () =>{
+    setRetry('');
+    setError('Something Went Wrong');
   }
 
   return (
@@ -41,7 +53,9 @@ function App() {
       <section>
         {!isLoading && movies.length>0 &&<MoviesList movies={movies} />}
         {!isLoading && movies.length===0 && <p>No movie found</p>}
-        {isLoading && <p>Loading...</p>}
+        {isLoading && !err && retry.length === 0 && <p>Loading...</p>}
+        {err.length===0?<p>{retry}</p>:<p>{err}</p>}
+        {retry &&<button onClick={retryingHandler}> Cancel </button>}
       </section>
     </React.Fragment>
   );
