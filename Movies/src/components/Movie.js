@@ -6,16 +6,26 @@ const Movie = (props) => {
 
   const deleteMovie = async(event) => {
     event.preventDefault();
-
-    const response = await fetch(`https://react-f984f-default-rtdb.firebaseio.com/movies/${props.id}.json`, {
-      method: 'DELETE',
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to delete movie.');
+    try{
+      const getResponse = await fetch('https://react-f984f-default-rtdb.firebaseio.com/movies.json');
+      const data = await getResponse.json();
+  
+      let id = null;
+  
+      for(const key in data){
+        if(data[key].title === props.title){
+          id = key;
+        }
+      }
+      
+      console.log(id)
+      const response = await fetch(`https://react-f984f-default-rtdb.firebaseio.com/movies/${id}.json`, {
+        method: 'DELETE',
+      });
     }
-
-    console.log('Movie deleted successfully.');
+    catch(err){
+      console.log(err)
+    }
   }
 
   return (
