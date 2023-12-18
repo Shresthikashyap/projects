@@ -1,9 +1,11 @@
 import classes from './ProfileForm.module.css';
 import AuthContext from '../../store/auth-context';
 import { useContext, useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const ProfileForm = () => {
 
+  const history = useHistory()
   const newPasswordRef = useRef();
   const authCntxt = useContext(AuthContext);
   const token = authCntxt.token;
@@ -39,6 +41,12 @@ const ProfileForm = () => {
       }
     })
   }
+ 
+  //auto logout
+  setTimeout(()=>{
+     authCntxt.logout();
+     history.replace('/auth');
+  },240000);
 
   return (
     <form className={classes.form} onSubmit={changePasswordHandler}>
