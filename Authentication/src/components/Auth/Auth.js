@@ -1,9 +1,13 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react';
 
 import classes from './AuthForm.module.css';
+import AuthContext from '../../store/auth-context';
 //import userEvent from '@testing-library/user-event';
 
 const AuthForm = () => {
+
+  const authCntxt = useContext(AuthContext);
+
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const [isLogin, setIsLogin] = useState(true);
@@ -20,9 +24,15 @@ const AuthForm = () => {
     const enteredPassword = passwordInputRef.current.value;
 
     //validation
-
+    let url = null;
     if(isLogin){
-      fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCv1ruYo50isrfGtym2fBvPk_jC8xN4EC0',{
+      url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCv1ruYo50isrfGtym2fBvPk_jC8xN4EC0';
+    }
+    else{
+      url ='https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCv1ruYo50isrfGtym2fBvPk_jC8xN4EC0'
+    }
+
+    fetch(url,{
         method:'POST',
         body: JSON.stringify({
           email:enteredEmail,
@@ -34,46 +44,20 @@ const AuthForm = () => {
         }
       }).then(async(res)=>{
         console.log('done')
-        const token  = await res.json();
-        console.log('token',token);
+        const data= await res.json();
+        authCntxt.login(data.idToken)
         if(res.ok){
           setIsLoading(false);
           console.log('done')
         }
         else{
           setIsLoading(false);
-          alert('somethings wrong',res)
-          return res.json().then((data)=>{
-            console.log(data);
-          })
-        }
-        })
-
-
-    } else {
-      fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCv1ruYo50isrfGtym2fBvPk_jC8xN4EC0',{
-        method:'POST',
-        body: JSON.stringify({
-            email:enteredEmail,
-            password:enteredPassword,
-          returnSecureToken: true
-        }),
-        headers:{
-          'Content-Type':'application/json'
-        }
-      }).then(res=>{
-        if(res.ok){
-          setIsLoading(false);
-          console.log('done')
-        }else{
-          setIsLoading(false);
-          alert('email exists')
+          alert('somethings wrong',res);
           return res.json().then((data)=>{
             console.log(data);
           })
         }
       })
-    }
   }
   return (
     <section className={classes.auth}>
